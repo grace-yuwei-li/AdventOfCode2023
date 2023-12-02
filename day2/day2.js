@@ -32,11 +32,15 @@ function processGame(line) {
 		blue: 14,
 	};
 
+	const maxCountPower = Object.values(maxCount).reduce(
+		(acc, value) => acc * value,
+		1
+	);
 	const limitExceeded = Object.entries(maxCount).some(([color, count]) => {
 		return count > limit[color];
 	});
 
-	return { gameID, limitExceeded };
+	return { gameID, limitExceeded, maxCountPower };
 }
 
 fs.readFile("day2input.txt", "utf-8", (err, data) => {
@@ -58,7 +62,11 @@ fs.readFile("day2input.txt", "utf-8", (err, data) => {
 		.map((game) => parseInt(game.gameID, 10));
 
 	const sum = possibleIDs.reduce((sum, id) => (sum += id), 0);
+	const sumOfPowers = games.reduce((sum, id) => (sum += id.maxCountPower), 0);
 
 	console.log("Result IDs", possibleIDs);
 	console.log("Sum", sum);
+
+	// Part 2:
+	console.log("Maxpower", sumOfPowers);
 });
