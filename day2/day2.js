@@ -68,5 +68,5 @@ fs.readFile("day2input.txt", "utf-8", (err, data) => {
 	console.log("Sum", sum);
 
 	// Part 2:
-	console.log("Maxpower", sumOfPowers);
+	console.log("Min power", sumOfPowers);
 });
