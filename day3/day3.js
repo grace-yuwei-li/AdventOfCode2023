@@ -40,6 +40,7 @@ fs.readFile('day3input.txt', 'utf-8', (err, data) => {
 									}
 									k--;
 								}
+								let tempK = k;
 								k = newCol + 1;
 
 								while (!isNaN(lines[newRow][k])) {
@@ -49,7 +50,7 @@ fs.readFile('day3input.txt', 'utf-8', (err, data) => {
 									k++;
 								}
 
-								const key = `${char}-${rowIdx}-${colIdx}-${adjacentChar}`;
+								const key = `${char}-${rowIdx}-${colIdx}-${adjacentChar}-${tempK}-${k}`;
 
 								if (!adjacentNumbersMap.has(key)) {
 									const adjacentNumberValue = parseInt(adjacentChar);
@@ -59,6 +60,8 @@ fs.readFile('day3input.txt', 'utf-8', (err, data) => {
 										row: rowIdx,
 										col: colIdx,
 										adjacentNumber: adjacentChar,
+										tempK,
+										k,
 									});
 								}
 							}
@@ -68,6 +71,31 @@ fs.readFile('day3input.txt', 'utf-8', (err, data) => {
 			}
 		}
 	});
-
 	console.log('Sum of all adjacent numbers: ', sum);
+
+	// Part 2:
+	const gearOutput = {};
+	adjacentNumbersMap.forEach((value) => {
+		if (value.symbol === '*') {
+			const newKey = `*-${value.row}-${value.col}`;
+
+			if (gearOutput[newKey]) {
+				gearOutput[newKey].adjacentNumbers.push(Number(value.adjacentNumber));
+			} else {
+				gearOutput[newKey] = {
+					...value,
+					adjacentNumbers: [Number(value.adjacentNumber)],
+				};
+			}
+		}
+	});
+
+	let gearRatioSum = 0;
+	Object.entries(gearOutput).forEach(([, value]) => {
+		if (value.adjacentNumbers && value.adjacentNumbers.length === 2) {
+			gearRatioSum += value.adjacentNumbers[0] * value.adjacentNumbers[1];
+		}
+	});
+
+	console.log('Sum of all gear ratios: ', gearRatioSum);
 });
