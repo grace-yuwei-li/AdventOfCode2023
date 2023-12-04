@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require('fs');
 
 // Day 1: What is the sum of all the possible game IDs?
 // Part 1:
@@ -11,15 +11,15 @@ function processGame(line) {
 	}
 
 	const gameID = match[1];
-	const rounds = match[2].split(";").filter(Boolean);
+	const rounds = match[2].split(';').filter(Boolean);
 
 	let maxCount = { red: 0, green: 0, blue: 0 };
 
 	rounds.forEach((round) => {
-		const items = round.trim().split(", ");
+		const items = round.trim().split(', ');
 
 		items.forEach((item) => {
-			const parts = item.split(" ");
+			const parts = item.split(' ');
 			const count = parseInt(parts[0], 10);
 			const color = parts[1].toLowerCase();
 			maxCount[color] = Math.max(maxCount[color], count);
@@ -43,13 +43,13 @@ function processGame(line) {
 	return { gameID, limitExceeded, maxCountPower };
 }
 
-fs.readFile("day2input.txt", "utf-8", (err, data) => {
+fs.readFile('day2input.txt', 'utf-8', (err, data) => {
 	if (err) {
-		console.error("uh oh file is weird and cant really be read", err);
+		console.error('uh oh file is weird and cant really be read', err);
 		return;
 	}
 
-	const lines = data.split("\n");
+	const lines = data.split('\n');
 	const games = lines
 		.map((line) => processGame(line))
 		.filter((game) => game !== null);
@@ -64,9 +64,9 @@ fs.readFile("day2input.txt", "utf-8", (err, data) => {
 	const sum = possibleIDs.reduce((sum, id) => (sum += id), 0);
 	const sumOfPowers = games.reduce((sum, id) => (sum += id.maxCountPower), 0);
 
-	console.log("Result IDs", possibleIDs);
-	console.log("Sum", sum);
+	console.log('Result IDs', possibleIDs);
+	console.log('Sum', sum);
 
 	// Part 2:
-	console.log("Min power", sumOfPowers);
+	console.log('Min power', sumOfPowers);
 });
