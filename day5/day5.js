@@ -11,12 +11,8 @@ fs.readFile('day5input.txt', 'utf-8', (err, data) => {
 	}
 
 	const lines = data.split('\n');
-	const seedMap = new Map();
 	const seedIDs = lines[0].slice(7).split(' ').map(Number);
-
-	for (let i = 0; i < seedIDs.length; i++) {
-		seedMap.set(parseInt(seedIDs[i]), parseInt(seedIDs[i]));
-	}
+	const seedIDs2 = lines[0].slice(7).split(' ').map(Number);
 
 	const sections = lines.slice(1).join('\n').replace(/\s+/, '').split('\n');
 
@@ -66,65 +62,51 @@ fs.readFile('day5input.txt', 'utf-8', (err, data) => {
 		humidityToLocationArr,
 	];
 
-	function compareForDestinationArrays(seedMap, index) {
+	// Part 1:
+	let minValue = Infinity;
+	for (let i = 0; i < seedIDs.length; i++) {
+		mapToLocation(parseInt(seedIDs[i]), 0);
+	}
+
+	// Part 2:
+	let minValue2 = Infinity;
+	for (let i = 0; i < seedIDs2.length; i += 2) {
+		let idx = 0;
+		mapToLocation(parseInt(seedIDs2[i]), 0);
+		console.log('processed one seed', i);
+		while (idx < seedIDs2[i + 1]) {
+			mapToLocation(parseInt(seedIDs2[i]) + idx, 0);
+			idx++;
+		}
+	}
+
+	function mapToLocation(seed, index) {
 		if (index === destinationArrays.length) {
 			return;
 		}
 		const destArr = destinationArrays[index];
-		seedMap.forEach((value, key) => {
-			compareRange(seedMap, key, value, destArr);
-		});
-		compareForDestinationArrays(seedMap, index + 1);
+		const newSeedValue = applyRanges(seed, destArr);
+		if (index === destinationArrays.length - 1) {
+			minValue2 = Math.min(newSeedValue, minValue2);
+		}
+		mapToLocation(newSeedValue, index + 1);
 	}
 
-	compareForDestinationArrays(seedMap, 0);
-
-	const result = findMinValue(seedMap);
-	console.log('Lowest location number: ', result);
+	console.log('Lowest location number: ', minValue);
+	console.log('Lowest location number for part 2: ', minValue2);
 });
-
-function findMinValue(map) {
-	let minValue = Infinity;
-
-	for (const value of map.values()) {
-		minValue = Math.min(value, minValue);
-	}
-
-	return minValue;
-}
 
 function parseArrData(line, arr) {
 	const entries = line.split(' ').map(Number);
 	arr.push(entries);
 }
 
-function compareRange(map, key, value, arr) {
+function applyRanges(value, arr) {
+	let newValue = value;
 	for (let i = 0; i < arr.length; i++) {
 		if (value <= arr[i][1] + arr[i][2] - 1 && value >= arr[i][1]) {
-			map.set(key, arr[i][0] + value - arr[i][1]);
+			newValue = arr[i][0] + value - arr[i][1];
 		}
 	}
-}
-
-function printMap(map) {
-	console.log('size: ', map.size);
-	map.forEach((value, key) => {
-		console.log('Key: ', key, 'Value: ', value);
-	});
-}
-
-function printArr(arr) {
-	console.log('length: ', arr.length);
-	arr.forEach((value, index) => {
-		console.log(
-			'index',
-			index,
-			'Destination: ',
-			value[0],
-			'Source: ',
-			value[1],
-			'Offset ',
-			value[2]
-		);
-	});
+	return newValue;
 }
