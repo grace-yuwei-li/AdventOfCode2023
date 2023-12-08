@@ -35,18 +35,30 @@ function findTotalWinnings(sortedHands) {
 
 function parseAndClassifyHand(line) {
 	let cards = {};
+	let numOfJokers = 0;
 	const newLine = line.split(' ');
 	const hand = newLine[0];
+
+	// Part 2: New joker rules
 	for (const card of hand) {
-		if (cards[card]) {
-			cards[card]++;
+		if (card === 'J') {
+			numOfJokers++;
 		} else {
-			cards[card] = 1;
+			if (cards[card]) {
+				cards[card]++;
+			} else {
+				cards[card] = 1;
+			}
 		}
 	}
 	let cardTypeCounts = Object.values(cards).sort((a, b) => {
 		return b - a;
 	});
+	if (cardTypeCounts[0]) {
+		cardTypeCounts[0] += numOfJokers;
+	} else {
+		cardTypeCounts[0] = numOfJokers;
+	}
 	let handResult;
 	switch (cardTypeCounts[0]) {
 		case 5:
@@ -80,11 +92,13 @@ function sortHands(hands) {
 		8: 8,
 		9: 9,
 		T: 10,
-		J: 11,
+		// Part 2
+		J: 1,
 		Q: 12,
 		K: 13,
 		A: 14,
 	};
+
 	return hands.sort((a, b) => {
 		// First hand rank of A is greater
 		if (a[a.length - 1] > b[b.length - 1]) {
