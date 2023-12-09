@@ -1,5 +1,5 @@
 LLR
 
-AAA = (BBB, BBB)
-BBB = (AAA, ZZZ)
+11A = (BBB, BBB)
+BBB = (11A, ZZZ)
 ZZZ = (ZZZ, ZZZ)
