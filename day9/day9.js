@@ -11,7 +11,7 @@ fs.readFile('day9input.txt', 'utf-8', (err, data) => {
 	const nums = lines.map((line) => line.split(' ').map((num) => parseInt(num)));
 
 	const histories = nums.map(processNums);
-	let result = histories.reduce((acc, curr) => acc + curr, 0);
+	const result = histories.reduce((acc, curr) => acc + curr, 0);
 
 	console.log('The sum of the extrapolated values is: ', result);
 });
@@ -31,10 +31,20 @@ function processNums(line) {
 
 	const sequences = nextLines.reverse();
 	for (let i = 0; i < sequences.length - 1; i++) {
-		const sum =
-			sequences[i][sequences[i].length - 1] +
-			sequences[i + 1][sequences[i + 1].length - 1];
-		sequences[i + 1].push(sum);
+		// Part 1:
+		// const sum =
+		//	sequences[i][sequences[i].length - 1] +
+		//	sequences[i + 1][sequences[i + 1].length - 1];
+		const sum2 = sequences[i + 1][0] - sequences[i][0];
+
+		// Part 1:
+		// sequences[i + 1].push(sum);
+		sequences[i + 1].unshift(sum2);
 	}
-	return sequences.pop().pop();
+
+	// Part 1:
+	// return sequences.pop().pop();
+
+	// Part 2:
+	return sequences[sequences.length - 1][0];
 }
