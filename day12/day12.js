@@ -12,7 +12,7 @@ function readInputFile(filename, callback) {
 	});
 }
 
-// Part 1 functions
+// Part 1 functions:
 function isValid(possibleArr, groupings) {
 	let grouping = 0;
 	let damageCount = 0;
@@ -164,7 +164,7 @@ function dpSubRoutines(dp, row, groupings) {
 				dp[i][j][0] = dp[i - 1][j - 1][groupings[j - 1]] + dp[i - 1][j][0];
 			}
 
-			// Update possible comibinations within each groupings
+			// Update possible combinations within each groupings
 			for (let j = 0; j <= groupings.length; j++) {
 				for (let k = 0; k < Math.max(...groupings); k++) {
 					dp[i][j][k + 1] = dp[i - 1][j][k];
