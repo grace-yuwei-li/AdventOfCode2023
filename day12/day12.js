@@ -81,7 +81,7 @@ function parseLine(line) {
 function parseCopies(line, scale) {
 	let [row, groupings] = line.split(' ');
 	return {
-		// This makes 5 copies of the same row, and joins it with '?'
+		// This makes scale copies of the same row, and joins it with '?'
 		row: Array.from({ length: scale }, () => row)
 			.join('?')
 			.split(''),
